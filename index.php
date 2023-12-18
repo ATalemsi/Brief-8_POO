@@ -10,12 +10,12 @@ $database = new Database('localhost', 'gestion_dataware', 'root', '');
 $database->connect();
 $pdo = $database->getPDO();
 
-$user = new User($pdo);
+$users = new User($pdo);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $emailA = $_POST["email"];
     $passwordA = $_POST["password"];
-    $authenticatedUser = $user->login($emailA, $passwordA);
+    $authenticatedUser = $users->login($emailA, $passwordA);
 
     if ($authenticatedUser) {
         if ($emailA == $admin_email && $passwordA == $admin_password) {

@@ -10,12 +10,10 @@ $pdo = $database->getPDO();
 
 $role = isset($_SESSION["role"]) ? $_SESSION["role"] : "Unknown Role";
 $name = isset($_SESSION["nom"]) ? $_SESSION["nom"] : "Unknown nom";
-if ($role !== 'user') {
-    header("Location: unauthorized.php");
-    exit();
-}
-$logout= new User($pdo);
+
+
  if (isset($_GET['action']) && $_GET['action'] === 'logout') {
+  $logout= new User($pdo);
   $logout->logout();
 }
 $dashboard = new Dashboard($pdo);

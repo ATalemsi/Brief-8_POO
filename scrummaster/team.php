@@ -2,6 +2,7 @@
 include '../config.php';
 include '../ScrumMaster.php';
 include '../Team.php';
+session_start();
 //---------------------------------------
 $database = new Database('localhost', 'gestion_dataware', 'root', '');
 $database->connect();
@@ -14,8 +15,9 @@ if ($role !== 'scrum_master') {
   exit();
 }
 //---------------------------------------
-$logout=new User($pdo);
+
 if (isset($_GET['action']) && $_GET['action'] === 'logout') {
+  $logout=new ScrumMaster($pdo);
   $logout->logout();
 }
 $DeleteTeam = new ScrumMaster($pdo);

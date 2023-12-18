@@ -14,10 +14,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["assign-member"])) {
     $ASMember = new ScrumMaster($pdo);
     $ASMember->AssignerM($teamID,$userID);
 }
-$team=new Team($pdo);
-$membersQuery =new Team($pdo);
-$teams->GetTeamName();
-$members->GetMember();
+$teamsquery=new Team($pdo);
+$membersquery =new Team($pdo);
 ?>
 
 <!DOCTYPE html>
@@ -42,6 +40,7 @@ $members->GetMember();
                 <label for="team-id" class="block text-gray-600 text-sm font-semibold mb-2">Select Team</label>
                 <select id="team-id" name="team-id" class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:border-blue-500" required>
                     <?php
+                     $teams=$teamsquery->GetTeamName();
                         foreach ($teams as $team) {
                             echo "<option value=\"{$team['TeamID']}\">{$team['TeamName']}</option>";
                         }
@@ -52,6 +51,7 @@ $members->GetMember();
                 <label for="user-id" class="block text-gray-600 text-sm font-semibold mb-2">Select Member</label>
                 <select id="user-id" name="user-id" class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:border-blue-500" required>
                     <?php
+                       $members=$membersquery->GetMember();
                         foreach ($members as $member) {
                             echo "<option value=\"{$member['ID_User']}\">{$member['Nom']} {$member['Prenom']}</option>";
                         }

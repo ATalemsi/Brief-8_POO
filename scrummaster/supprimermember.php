@@ -1,5 +1,9 @@
 <?php
 include '../ScrumMaster.php';
+include '../config.php';
+$database = new Database('localhost', 'gestion_dataware', 'root', '');
+$database->connect();
+$pdo = $database->getPDO();
 if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["team-id"]) && isset($_GET["user-id"])) {
     $teamID = $_GET["team-id"];
     $userID = $_GET["user-id"];

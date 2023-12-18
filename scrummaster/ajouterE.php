@@ -2,9 +2,9 @@
 include '../ScrumMaster.php';
 include '../config.php';
 session_start();
-
-
-
+$database = new Database('localhost', 'gestion_dataware', 'root', '');
+$database->connect();
+$pdo = $database->getPDO();
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["ajouter-team"])) {
     $teamName = $_POST["team-name"];
     $scrumMasterID = $_POST["scrum-master"];
@@ -13,10 +13,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["ajouter-team"])) {
     $AddTeam->addteam($teamName,$scrumMasterID);
 }
 $authenticatedUserID = $_SESSION['user']['ID_User'];
-$scrummaster= new ScrumMaster($pdo);
-$scrummaster->GetScrum($authenticatedUserID);
+$scrummasters = new ScrumMaster($pdo);
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,19 +37,20 @@ $scrummaster->GetScrum($authenticatedUserID);
                 <label for="team-name" class="block text-gray-600 text-sm font-semibold mb-2">Team Name</label>
                 <input type="text" id="team-name" name="team-name" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" placeholder="Team Name" required>
             </div>
-
-            <!-- Dropdown for selecting Scrum Master -->
             <div class="mb-4">
-                <label for="scrum-master" class="block text-gray-600 text-sm font-semibold mb-2">Scrum Master</label>
-                <select id="scrum-master" name="scrum-master" class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:border-blue-500">
-                <?php
-                        
-                        echo "<option value=\"{$scrummaster[0]['ID_User']}\">{$scrummaster[0]['Nom']} {$scrummaster[0]['Prenom']}</option>";
-                    
-                ?>
-                </select>
-            </div>
+                    <label for="scrum-master" class="block text-gray-600 text-sm font-semibold mb-2">Scrum Master</label>
+                    <select id="scrum-master" name="scrum-master" class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:border-blue-500">
+                        <?php
+                        $scrumMasterData = $scrummasters->GetScrum($authenticatedUserID);
 
+                        if ($scrumMasterData !== false) {
+                            echo "<option value=\"{$scrumMasterData['ID_User']}\">{$scrumMasterData['Nom']} {$scrumMasterData['Prenom']}</option>";
+                        } else {
+                            echo "<option value=\"\">No Scrum Master found</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
             <button type="submit" class="w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:border-green-700 focus:ring focus:ring-green-200" name="ajouter-team">
                 Add Team
             </button>

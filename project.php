@@ -11,8 +11,9 @@ $pdo = $database->getPDO();
 $role = isset($_SESSION["role"]) ? $_SESSION["role"] : "Unknown Role";
 $name = isset($_SESSION["nom"]) ? $_SESSION["nom"] : "Unknown nom";
 
-$logout=new User($pdo);
+
 if (isset($_GET['action']) && $_GET['action'] === 'logout') {
+  $logout=new User($pdo);
   $logout->logout();
 }
 $userID = $_SESSION['user']['ID_User'];

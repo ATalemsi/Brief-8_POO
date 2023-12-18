@@ -2,13 +2,19 @@
 include '../ScrumMaster.php';
 include '../statistic.php';
 include '../config.php';
-include '../User.php';
+
 
 
 session_start();
 $database = new Database('localhost', 'gestion_dataware', 'root', '');
 $database->connect();
 $pdo = $database->getPDO();
+
+
+if (isset($_GET['action']) && $_GET['action'] === 'logout') {
+  $logout=new ScrumMaster($pdo);
+  $logout->logout();
+}
 
 $role = isset($_SESSION["role"]) ? $_SESSION["role"] : "Unknown Role";
 $name = isset($_SESSION["nom"]) ? $_SESSION["nom"] : "Unknown nom";
@@ -17,8 +23,9 @@ if ($role !== 'scrum_master') {
     exit();
 }
 
-$logout= new User($pdo);
+
  if (isset($_GET['action']) && $_GET['action'] === 'logout') {
+  $logout= new ScrumMaster($pdo);
   $logout->logout();
 }
 

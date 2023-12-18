@@ -15,27 +15,28 @@ class User
     }
 
     public function login($email, $password)
-    {
-        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE Email = ?");
-        $stmt->execute([$email]);
-        $user = $stmt->fetch();
+        {
+            $stmt = $this->pdo->prepare("SELECT * FROM users WHERE Email = ?");
+            $stmt->execute([$email]);
+            $user = $stmt->fetch();
 
-        if ($user && password_verify($password, $user['PasswordU'])) {
+            if ($user !== false && password_verify($password, $user['PasswordU'])) {
+                // Only proceed if $user is not false
 
-            $this->userID = $user['ID_User'];
-            $this->nom = $user['Nom'];
-            $this->prenom = $user['Prenom'];
-            $this->email = $user['Email'];
-            $this->tel = $user['Tel'];
-            $this->role = $user['UserRole'];
+                $this->userID = $user['ID_User'];
+                $this->nom = $user['Nom'];
+                $this->prenom = $user['Prenom'];
+                $this->email = $user['Email'];
+                $this->tel = $user['Tel'];
+                $this->role = $user['UserRole'];
 
-            return true;
-        } else {
-            return false;
+                return $user;
+            } else {
+                return false;
+            }
         }
-    }
 
-    public function registerUser($nom, $prenom, $email, $tel, $password, $role)
+    public function signUp($nom, $prenom, $email, $tel, $password, $role)
     {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 

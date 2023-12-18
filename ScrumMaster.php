@@ -1,7 +1,6 @@
 <?php
 include('User.php');
 class ScrumMaster extends User{
-
     public function addteam($teamName,$scrumMasterID){
 
         try {
@@ -15,12 +14,12 @@ class ScrumMaster extends User{
             echo "Error adding team: " . $e->getMessage();
         }
      }
-     public function GetScrum($authenticatedUserID){
+     public function GetScrum($id){
         $query = "SELECT ID_User, Nom, Prenom FROM Users WHERE UserRole = 'scrum_master' AND ID_User = ?";
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute([$authenticatedUserID]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-     }
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
      public function AssignerM($teamID,$userID){
         try{
             $stmt = $this->pdo->prepare("INSERT INTO TeamMembers (TeamID, UserID) VALUES (?, ?)");
@@ -37,7 +36,7 @@ class ScrumMaster extends User{
            try{
              $stmt = $this->pdo->prepare("DELETE FROM teams WHERE TeamID = ?");
             $stmt->execute([$id]);
-            header("Location: teams.php");
+            header("Location: team.php");
             exit();
 
            }catch (PDOException $e) {
@@ -77,6 +76,19 @@ class ScrumMaster extends User{
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
      }
+     public function logout()
+    {
+        
+
+        
+        $_SESSION = array();
+
+        
+        session_destroy();
+
+        header("Location: ../index.php");
+        exit();
+    }
      
 
  }
