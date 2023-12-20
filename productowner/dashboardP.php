@@ -1,38 +1,28 @@
 <?php
+include('../ProductOwner.php');
+include('../statistic.php');
 include('../config.php');
 session_start(); 
+
+$database = new Database('localhost', 'gestion_dataware', 'root', '');
+$database->connect();
+$pdo = $database->getPDO();
+
 $role = isset($_SESSION["role"]) ? $_SESSION["role"] : "Unknown Role";
 $name = isset($_SESSION["nom"]) ? $_SESSION["nom"] : "Unknown nom";
-if ($role!== 'product_owner') {
-  // Redirect to an unauthorized access page or show an error message
-  header("Location: unauthorized.php");
-  exit();
-}
-function getCount($pdo, $table, $column)
-{
-    $stmt = $pdo->query("SELECT COUNT($column) AS count FROM $table");
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $result['count'];
-}
-function getCountP($pdo, $table, $column)
-{
-    $stmt = $pdo->query("SELECT COUNT($column) AS count FROM $table where UserRole='product_owner'");
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $result['count'];
-}
-function getCountS($pdo, $table, $column)
-{
-    $stmt = $pdo->query("SELECT COUNT($column) AS count FROM $table where UserRole='scrum_master'");
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $result['count'];
-}
 
 
-$userCount = getCount($pdo, 'users', 'ID_User');
-$productOwnerCount = getCountP($pdo, 'users', 'ID_User');
-$scrumMasterCount = getCountS($pdo, 'users', 'ID_User');
-$projectCount = getCount($pdo, 'projects', 'ProjectID');
-$teamCount = getCount($pdo, 'teams', 'TeamID');
+ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
+  $logout= new Productowner($pdo);
+  $logout->logout();
+}
+$dashboard = new Dashboard($pdo);
+
+$userCount = $dashboard->getCount('users', 'ID_User');
+$productOwnerCount = $dashboard->getCountP('users', 'ID_User');
+$scrumMasterCount = $dashboard->getCountS('users', 'ID_User');
+$projectCount = $dashboard->getCount('projects', 'ProjectID');
+$teamCount = $dashboard->getCount('teams', 'TeamID');
 ?>
 <!DOCTYPE html>
 <html lang="en">

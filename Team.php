@@ -9,13 +9,13 @@ public function __construct($pdo) {
     $this->pdo = $pdo;
 }
 public function GetTeamName(){
-    $teamsQuery = "SELECT TeamID, TeamName FROM Teams";
+    $teamsQuery = "SELECT TeamID, TeamName FROM teams";
     $teamsStmt = $this->pdo->prepare($teamsQuery);
     $teamsStmt->execute();
     return $teamsStmt->fetchAll(PDO::FETCH_ASSOC);
 }
 public function GetMember(){
-    $membersQuery = "SELECT ID_User, Nom, Prenom FROM Users WHERE UserRole = 'user' AND ID_User NOT IN (SELECT UserID FROM TeamMembers)";
+    $membersQuery = "SELECT ID_User, Nom, Prenom FROM users WHERE UserRole = 'user' AND ID_User NOT IN (SELECT UserID FROM teammembers)";
     $membersStmt = $this->pdo->prepare($membersQuery);
     $membersStmt->execute();
     return  $membersStmt->fetchAll(PDO::FETCH_ASSOC);;
@@ -23,9 +23,9 @@ public function GetMember(){
 public function getUserTeams($userID)
 {
     $stmt = $this->pdo->prepare("
-    SELECT t.TeamID, t.TeamName, u.Nom AS NomU ,u.Prenom AS PrenomU FROM Teams t  INNER JOIN TeamMembers tm ON t.TeamID = tm.TeamID 
+    SELECT t.TeamID, t.TeamName, u.Nom AS NomU ,u.Prenom AS PrenomU FROM teams t  INNER JOIN teammembers tm ON t.TeamID = tm.TeamID 
     INNER JOIN
-    Users u ON tm.UserID = u.ID_User WHERE u.ID_User = ?
+    users u ON tm.UserID = u.ID_User WHERE u.ID_User = ?
     ");
     $stmt->execute([$userID]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -42,6 +42,7 @@ public function getUserTeams($userID)
         }
 
   }
+
   public function GetTeamScrum(){
     
     $teamID= null;
@@ -64,9 +65,9 @@ public function getUserTeams($userID)
         u.Nom AS ScrumMasterName,
         u.Prenom AS ScrumMasterPrenom
         FROM
-        Teams t
-        LEFT JOIN Users u ON t.ScrumMasterID = u.ID_User
-        LEFT JOIN TeamMembers tm ON t.TeamID = tm.TeamID";
+        teams t
+        LEFT JOIN users u ON t.ScrumMasterID = u.ID_User
+        LEFT JOIN teammembers tm ON t.TeamID = tm.TeamID";
 
     $stmtTeams = $this->pdo->prepare($teamsSql);
 
@@ -92,8 +93,8 @@ public function getUserTeams($userID)
 
     // SQL query to fetch team members
     $membersSql = "SELECT tm.TeamID, u.Nom AS UserNom, u.Prenom AS UserPrenom, u.UserRole, u.ID_User
-        FROM TeamMembers tm
-        LEFT JOIN Users u ON tm.UserID = u.ID_User";
+        FROM teammembers tm
+        LEFT JOIN users u ON tm.UserID = u.ID_User";
 
     $stmtMembers = $this->pdo->prepare($membersSql);
 

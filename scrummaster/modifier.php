@@ -1,6 +1,10 @@
 <?php
 include '../ScrumMaster.php';
 include '../Team.php';
+$database = new Database('localhost', 'gestion_dataware', 'root', '');
+$database->connect();
+$pdo = $database->getPDO();
+
 $updateteam= new ScrumMaster($pdo);
 if (isset($_GET['id'])) {
     $id = $_GET['id'];

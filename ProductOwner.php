@@ -36,6 +36,44 @@ class Productowner extends User{
          
 
     }
+    function updateProject($id, $projectName) {
+    
+        $stmt = $this->pdo->prepare("UPDATE projects SET ProjectName = ? WHERE ProjectID = ?");
+        $stmt->execute([$projectName, $id]);
+    
+        if ($stmt) {
+            echo "Project updated successfully!";
+            header("Location: project.php");
+            exit();
+        } else {
+            echo "Error updating project.";
+        }
+    }
+    public function Supprimer_project($id){
+        try{
+          $stmt = $this->pdo->prepare("DELETE FROM projects WHERE ProjectID = ?");
+         $stmt->execute([$id]);
+         header("Location: project.php");
+         exit();
 
+        }catch (PDOException $e) {
+         echo "Error removing member from team: " . $e->getMessage();
+     }
+  }
+
+    public function logout()
+    {
+        
+
+        
+        $_SESSION = array();
+
+        
+        session_destroy();
+
+        header("Location: ../index.php");
+        exit();
+    }
+    
 
 }

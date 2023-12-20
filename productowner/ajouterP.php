@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["ajouter-p"])) {
 
 $authenticatedUserID = $_SESSION['user']['ID_User'];
 $productOwners = new Productowner($pdo);
-$productOwners->GetProduct_project($authenticatedUserID);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -45,7 +45,7 @@ $productOwners->GetProduct_project($authenticatedUserID);
                 <label for="product-owner" class="block text-gray-600 text-sm font-semibold mb-2">Product Owner</label>
                 <select id="product-owner" name="product-owner" class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:border-blue-500">
                     <?php
-                        
+                          $productOwners->GetProduct_project($authenticatedUserID);
                             echo "<option value=\"{$productOwners[0]['ID_User']}\">{$productOwners[0]['Nom']} {$productOwners[0]['Prenom']}</option>";
                         
                     ?>

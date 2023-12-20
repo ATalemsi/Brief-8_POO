@@ -4,7 +4,7 @@ class ScrumMaster extends User{
     public function addteam($teamName,$scrumMasterID){
 
         try {
-            $stmt = $this->pdo->prepare("INSERT INTO Teams (TeamName, ScrumMasterID) VALUES (?, ?)");
+            $stmt = $this->pdo->prepare("INSERT INTO teams (TeamName, ScrumMasterID) VALUES (?, ?)");
             $stmt->execute([$teamName, $scrumMasterID]);
     
             echo "Team added successfully!";
@@ -15,14 +15,14 @@ class ScrumMaster extends User{
         }
      }
      public function GetScrum($id){
-        $query = "SELECT ID_User, Nom, Prenom FROM Users WHERE UserRole = 'scrum_master' AND ID_User = ?";
+        $query = "SELECT ID_User, Nom, Prenom FROM users WHERE UserRole = 'scrum_master' AND ID_User = ?";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
      public function AssignerM($teamID,$userID){
         try{
-            $stmt = $this->pdo->prepare("INSERT INTO TeamMembers (TeamID, UserID) VALUES (?, ?)");
+            $stmt = $this->pdo->prepare("INSERT INTO teammembers (TeamID, UserID) VALUES (?, ?)");
             $stmt->execute([$teamID, $userID]);
             echo "Member assigned to team successfully!";
             header("Location: team.php"); 

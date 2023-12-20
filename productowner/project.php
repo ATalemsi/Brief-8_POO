@@ -1,84 +1,31 @@
 <?php
 include '../config.php';
+include '../ProductOwner.php';
+include '../ProjectC.php';
 session_start();
-global $pdo;
+$database = new Database('localhost', 'gestion_dataware', 'root', '');
+$database->connect();
+$pdo = $database->getPDO();
+
 $role = isset($_SESSION["role"]) ? $_SESSION["role"] : "Unknown Role";
 $name = isset($_SESSION["nom"]) ? $_SESSION["nom"] : "Unknown nom";
 if ($role !== 'product_owner') {
-  // Redirect to an unauthorized access page or show an error message
   header("Location: ../unauthorized.php");
   exit();
 }
-
-// SQL query to fetch projects with Product Owner, Scrum Master, and team name
-$sql = "SELECT p.ProjectID, p.ProjectName, uProductOwner.Nom AS ProductOwner, uScrumMaster.Nom AS ScrumMaster, t.TeamName
-FROM projects p
-JOIN projectteams pt ON p.ProjectID = pt.ProjectID
-JOIN Teams t ON pt.TeamID = t.TeamID
-LEFT JOIN users uProductOwner ON p.ProductOwnerID = uProductOwner.ID_User
-LEFT JOIN users uScrumMaster ON t.ScrumMasterID = uScrumMaster.ID_User;
-";
-$stmt = $pdo->prepare($sql);
-
-$query = "SELECT projects.ProjectID ,projects.ProjectName ,users.Nom AS ProductOwner FROM projects INNER JOIN users ON users.ID_User=projects.ProductOwnerID ";
-$stmt2 = $pdo->prepare($query);
-
-
-if (!$stmt) {
-    die("Error preparing statement: " . $pdo->errorInfo());
+if (isset($_GET['action']) && $_GET['action'] === 'logout') {
+  $logout=new Productowner($pdo);
+  $logout->logout();
 }
-
-// Execute the statement
-if (!$stmt->execute()) {
-    die("Error executing statement: " . $stmt->errorInfo());
+$DeleteProject = new Productowner($pdo);
+if (isset($_GET['action']) && $_GET['action'] === 'supprimer' && isset($_GET['id'])) {
+  $id = $_GET['id'];
+  $DeleteProject->Supprimer_project($id);
 }
-
-if (!$stmt2) {
-  die("Error preparing statement: " . $pdo->errorInfo());
-}
-
-// Execute the statement
-if (!$stmt2->execute()) {
-  die("Error executing statement: " . $stmt->errorInfo());
-}
-
-// Bind the result variables
-$stmt->bindColumn('ProjectID', $projectID);
-$stmt->bindColumn('ProjectName', $projectName);
-$stmt->bindColumn('ProductOwner', $productOwner);
-$stmt->bindColumn('ScrumMaster', $scrumMaster);
-$stmt->bindColumn('TeamName', $teamName);
-
-// Bind the result variables
-$stmt2->bindColumn('ProjectID', $projectID);
-$stmt2->bindColumn('ProjectName', $projectName);
-// Fetch project data into an array
-$projects = [];
-while ($stmt->fetch(PDO::FETCH_BOUND)) {
-    $projects[] = [
-        'ProjectID' => $projectID,
-        'ProjectName' => $projectName,
-        'ProductOwner' => $productOwner,
-        'ScrumMaster' => $scrumMaster,
-        'TeamName' => $teamName,
-    ];
-
-}
-$projectall = [];
-while ($stmt2->fetch(PDO::FETCH_BOUND)) {
-    $projectall[] = [
-        'ProjectID' => $projectID,
-        'ProjectName' => $projectName,
-        'ProductOwner' => $productOwner,
-    ];
-
-}
-
-
-// Close the statement
-$stmt->closeCursor();
-$stmt2->closeCursor();
-
+$projectManager = new Project($pdo);
+$projectManagers = $projectManager->GetProject_product();
+$allproject =new Project($pdo); 
+$projectsall = $allproject->GetAllproject();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -158,7 +105,7 @@ $stmt2->closeCursor();
           </nav>
         </div>
         <div class=" flex  p-4">
-           <a href="../logout.php" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md" x-state-description="undefined: &quot;bg-gray-900 text-white&quot;, undefined: &quot;text-gray-300 hover:bg-gray-700 hover:text-white&quot;">
+           <a href="?action=logout" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md" x-state-description="undefined: &quot;bg-gray-900 text-white&quot;, undefined: &quot;text-gray-300 hover:bg-gray-700 hover:text-white&quot;">
            <svg class="text-gray-400 group-hover:text-gray-300 mr-3 flex-shrink-0 h-6 w-6" x-state-description="undefined: &quot;text-gray-300&quot;, undefined: &quot;text-gray-400 group-hover:text-gray-300&quot;" x-description="Heroicon name: outline/folder" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17,2H7C5.3,2,4,3.3,4,5v6h8.6l-2.3-2.3c-0.4-0.4-0.4-1,0-1.4c0.4-0.4,1-0.4,1.4,0l4,4c0.4,0.4,0.4,1,0,1.4c0,0,0,0,0,0l-4,4c-0.4,0.4-1,0.4-1.4,0c-0.4-0.4-0.4-1,0-1.4l2.3-2.3H4v6c0,1.7,1.3,3,3,3h10c1.7,0,3-1.3,3-3V5C20,3.3,18.7,2,17,2z"/></svg>
                 Sign out
@@ -203,7 +150,7 @@ $stmt2->closeCursor();
           </div>
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap justify-center gap-6">
-    <?php foreach ($projects as $project): ?>
+    <?php foreach ($projectManagers as $project): ?>
         <div class="relative flex flex-col text-gray-700 bg-white shadow-md w-80 rounded-xl bg-clip-border">
             <!-- Project image or other details -->
             <div class="p-6">
@@ -226,7 +173,7 @@ $stmt2->closeCursor();
                     </p>
                 </div>
                    <div class="p-6 pt-0">
-                           <a href="supprimer.php?id=<?= $project['ProjectID'] ?>" class="block w-full select-none rounded-lg bg-rose-500 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white transition-all hover:scale-105 focus:scale-105 focus:opacity-[0.85] active:scale-100 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">Supprimer</a>
+                           <a href="?action=supprimer&id=<?= $project['ProjectID'] ?>" class="block w-full select-none rounded-lg bg-rose-500 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white transition-all hover:scale-105 focus:scale-105 focus:opacity-[0.85] active:scale-100 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">Supprimer</a>
                         </div>
                     <div class="p-6 pt-0">
                            <a href="modifier.php?id=<?= $project['ProjectID'] ?>" class="block w-full select-none rounded-lg bg-blue-700 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white transition-all hover:scale-105 focus:scale-105 focus:opacity-[0.85] active:scale-100 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">Modifier</a>
@@ -238,7 +185,7 @@ $stmt2->closeCursor();
 </div>
      <h2 class="text-2xl font-semibold text-blue-600 my-16 ml-8">ALL Project</h2>  
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap justify-center gap-6 mt-12">
-    <?php foreach ($projectall as $projecta): ?>
+    <?php foreach ($projectsall as $projecta): ?>
         <div class="relative flex flex-col text-gray-700 bg-white shadow-md w-80 rounded-xl bg-clip-border">
             <!-- Project image or other details -->
             <div class="p-6">
@@ -251,7 +198,7 @@ $stmt2->closeCursor();
                     </p>
                 </div>
                    <div class="p-6 pt-0">
-                           <a href="supprimer.php?id=<?= $project['ProjectID'] ?>" class="block w-full select-none rounded-lg bg-rose-500 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white transition-all hover:scale-105 focus:scale-105 focus:opacity-[0.85] active:scale-100 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">Supprimer</a>
+                           <a href="?action=supprimer&id=<?= $project['ProjectID'] ?>" class="block w-full select-none rounded-lg bg-rose-500 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white transition-all hover:scale-105 focus:scale-105 focus:opacity-[0.85] active:scale-100 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">Supprimer</a>
                         </div>
                     <div class="p-6 pt-0">
                            <a href="modifier.php?id=<?= $project['ProjectID'] ?>" class="block w-full select-none rounded-lg bg-blue-700 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white transition-all hover:scale-105 focus:scale-105 focus:opacity-[0.85] active:scale-100 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">Modifier</a>

@@ -40,7 +40,7 @@ class User
     {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        $stmt = $this->pdo->prepare("INSERT INTO Users (Nom, Prenom, Email, Tel, PasswordU, UserRole) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt = $this->pdo->prepare("INSERT INTO users (Nom, Prenom, Email, Tel, PasswordU, UserRole) VALUES (?, ?, ?, ?, ?, ?)");
         $stmt->execute([$nom, $prenom, $email, $tel, $hashedPassword, $role]);
 
         if ($stmt) {
