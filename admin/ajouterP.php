@@ -1,25 +1,10 @@
 <?php // Start the session
 include '../config.php';
+include '../admin.php';
 session_start();
-
-// Function to register a new Product Owner
-function registerProductOwner($nom, $prenom, $email, $tel, $password, $role) {
-    global $pdo;
-        // Hash the password
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-            // Insert Product Owner data into the database
-            $stmt = $pdo->prepare("INSERT INTO Users (Nom, Prenom, Email, Tel, PasswordU, UserRole) VALUES (?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$nom, $prenom, $email, $tel, $hashedPassword, $role]);
-            if ($stmt) {
-            echo "Product Owner added successfully!";
-            header("Location: users.php");
-        } else {
-            echo "Error Registration Product Owner.";
-        }
-  
-}
-
+$database = new Database('localhost', 'gestion_dataware', 'root', '');
+$database->connect();
+$pdo = $database->getPDO();
 // Handle Product Owner registration
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["signup"])) {
     $nom = $_POST["signup-nom"];
@@ -29,7 +14,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["signup"])) {
     $password = $_POST["signup-password"];
     $role = $_POST["signup-role"];
     // Register the Product Owner
-    registerProductOwner($nom, $prenom, $email, $tel, $password, $role);
+    $AddUser = new Admin($pdo);
+    $AddUser->registerProductOwner($nom, $prenom, $email, $tel, $password, $role);
 }
 ?>
 

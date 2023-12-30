@@ -46,7 +46,7 @@ $userProjects = $userProjectsHandler->getUserProjects($userID);
           <a href="#" class="flex-shrink-0 w-full group block">
             <div class="flex items-center">
               <div>
-                <img class="inline-block h-9 w-9 rounded-full" src="img/moi.jpg" alt="profile">
+                <img class="inline-block h-9 w-9 rounded-full" src="img/moi.png" alt="profile">
               </div>
               <div class="ml-3">
                 <p class="text-sm font-medium text-white">
@@ -125,7 +125,7 @@ $userProjects = $userProjectsHandler->getUserProjects($userID);
             <?php foreach ($userProjects as $project) : ?>
                 <div class="relative flex flex-col text-gray-700 bg-white shadow-md w-80 rounded-xl bg-clip-border">
                     <div class="relative mx-4 mt-4 overflow-hidden text-gray-700 bg-white h-80 rounded-xl bg-clip-border">
-                        <img src="img/moi.jpg" class="object-cover w-full h-full" />
+                        <img src="img/moi.png" class="object-cover w-full h-full" />
                     </div>
                     <div class="p-6">
                         <div class="flex flex-col items-center justify-between mb-2">

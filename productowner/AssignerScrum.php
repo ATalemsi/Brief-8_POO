@@ -12,7 +12,7 @@ $pdo = $database->getPDO();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $projectID = $_POST["project_id"];
-    $projectID = $_POST["scrum_master_id"];
+    $scrumMasterID = $_POST["scrum_master_id"];
     $ASScrum = new Productowner($pdo);
     $ASScrum->AssignerScrum($projectID,$scrumMasterID);  
     exit();
@@ -45,8 +45,8 @@ $scrumMasters=new Project($pdo);
                 <label for="project_id" class="block text-gray-600 text-sm font-semibold mb-2">Select Project</label>
                 <select name="project_id" id="project_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" required>
                             <?php 
-                             $projects->GetProject_Without_Scrum();
-                            foreach ($projects as $project) : ?>
+                            $projectAll= $projects->GetProject_Without_Scrum();
+                            foreach ($projectAll as $project) : ?>
                         <option value="<?php  echo $project['ProjectID']; ?>"><?php echo $project['ProjectName']; ?></option>
                         <?php endforeach; ?>
                 </select>
@@ -55,8 +55,8 @@ $scrumMasters=new Project($pdo);
                 <label for="scrum_master_id" class="block text-gray-600 text-sm font-semibold mb-2">Select Team And ScrumMaster</label>
                 <select name="scrum_master_id" id="scrum_master_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" required>
                             <?php 
-                            $scrumMasters->Get_Scrum_Without_project();
-                            foreach ($scrumMasters as $scrumMaster) : ?>
+                             $scrumMasterALL=$scrumMasters->Get_Scrum_Without_project();
+                            foreach ($scrumMasterALL as $scrumMaster) : ?>
                         <option value="<?php echo $scrumMaster['TeamID']; ?>"><?php echo $scrumMaster['TeamName']; ?> /SM : <?php echo $scrumMaster['ScrumMasterName']; ?> <?php echo $scrumMaster['ScrumMasterPrenom']; ?></option>
                     <?php endforeach; ?>
                 </select>

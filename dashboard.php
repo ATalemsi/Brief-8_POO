@@ -105,7 +105,7 @@ $teamCount = $dashboard->getCount('teams', 'TeamID');
         <a href="/admin/users.php" class="text-white text-xl py-2">Users</a>
         <a href="?action=logout" class="text-white text-xl py-2">Sign out</a>
     </div>
-</div>
+    </div>
 
 <div class="md:pl-64 flex flex-col flex-1">
     <div class="sticky top-0 z-10 md:hidden pl-1 pt-1 sm:pl-3 sm:pt-3 bg-gray-100">
@@ -129,15 +129,7 @@ $teamCount = $dashboard->getCount('teams', 'TeamID');
                                 ?></h1>
           </div>
           <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 flex  flex-wrap  justify-center gap-6">
-            <!-- Replace with your content -->
-            
-            
-            
-            
-            
-            
-            
-            
+            <!-- Replace with your content -->          
      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         <!-- Number of Users Card -->
         <div class="bg-white p-4 rounded-md shadow-md">
@@ -174,7 +166,7 @@ $teamCount = $dashboard->getCount('teams', 'TeamID');
       </main>
     </div>
   </div>
-  </div>
+</div>
   <script>
       document.getElementById('burgerMenuButton').addEventListener('click', function () {
         document.getElementById('burgerMenu').classList.toggle('hidden');
@@ -184,6 +176,5 @@ $teamCount = $dashboard->getCount('teams', 'TeamID');
         document.getElementById('burgerMenu').classList.add('hidden');
     });
 </script>
-  </script>
 </body>
 </html>

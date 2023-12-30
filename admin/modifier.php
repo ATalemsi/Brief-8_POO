@@ -1,37 +1,16 @@
 <?php
 session_start(); 
 include '../config.php';
+include '../admin.php';
+$database = new Database('localhost', 'gestion_dataware', 'root', '');
+$database->connect();
+$pdo = $database->getPDO();
 
-
-function updateProductOwner($id, $nom, $prenom, $email, $tel, $password, $role) {
-    global $pdo;
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-    $stmt = $pdo->prepare("UPDATE users SET Nom = ?, Prenom = ?, Email = ?, Tel = ?, PasswordU = ?, UserRole = ? WHERE ID_User = ?");
-    $stmt->execute([$nom, $prenom, $email, $tel, $hashedPassword, $role, $id]);
-
-    if ($stmt) {
-        echo "Product Owner updated successfully!";
-        header("Location: users.php");
-        exit();
-    } else {
-        echo "Error updating user.";
-    }
-}
-
-
+$updateuser= new Admin($pdo);
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
-
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE ID_User = ?");
-    $stmt->execute([$id]);
-
-    if ($stmt) {
-        $member = $stmt->fetch(PDO::FETCH_ASSOC);
-    } else {
-        echo "Error executing query: " ;
-        exit();
-    }
+    $members=new Admin($pdo);
+    $member=$member->Get_Role($id);    
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["update"])) {
     $id = $_POST["updateId"];
@@ -41,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["update"])) {
     $tel = $_POST["modifier-tel"];
     $password = $_POST["modifier-password"];
     $role = $_POST["modifier-role"];
-    updateProductOwner($id, $nom, $prenom, $email, $tel, $password, $role);
+    $updateuser->updateProductOwner($id, $nom, $prenom, $email, $tel, $password, $role);
 }
 ?>
 

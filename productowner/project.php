@@ -53,7 +53,7 @@ $projectsall = $allproject->GetAllproject();
           <a href="#" class="flex-shrink-0 w-full group block">
             <div class="flex items-center">
               <div>
-                <img class="inline-block h-9 w-9 rounded-full" src="../img/moi.jpg" alt="profile">
+                <img class="inline-block h-9 w-9 rounded-full" src="../img/moi.png" alt="profile">
               </div>
               <div class="ml-3">
                 <p class="text-sm font-medium text-white">
@@ -119,9 +119,11 @@ $projectsall = $allproject->GetAllproject();
         <button id="closeBurgerMenu" class="text-white">&times;</button>
     </div>
     <div class="flex flex-col items-center mt-20">
-        <a href="/admin/dashboardA.php" class="text-white text-xl py-2">Dashboard</a>
-        <a href="/admin/users.php" class="text-white text-xl py-2">Users</a>
-        <a href="/Login.php" class="text-white text-xl py-2">Sign out</a>
+        <a href="dashboardP.php" class="text-white text-xl py-2">Dashboard</a>
+        <a href="project.php" class="text-white text-xl py-2">project</a>
+        <a href="ajouterP.php" class="text-white text-xl py-2">ADD project</a>
+        <a href="AssignerScrum.php" class="text-white text-xl py-2">Assigner Scrum Master</a>
+        <a href="?action=logout" class="text-white text-xl py-2">Sign out</a>
     </div>
 </div>
 

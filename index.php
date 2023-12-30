@@ -16,29 +16,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $emailA = $_POST["email"];
     $passwordA = $_POST["password"];
     $authenticatedUser = $users->login($emailA, $passwordA);
+    if ($emailA == $admin_email && $passwordA == $admin_password) {
+        $_SESSION['user_email'] = $admin_email;
+        $_SESSION['user_role'] = 'admin';
+        $_SESSION['nom_admin'] = 'Abdellah Talemsi';
+        header("Location: admin/dashboardA.php");
+        exit();
 
-    if ($authenticatedUser) {
-        if ($emailA == $admin_email && $passwordA == $admin_password) {
-            $_SESSION['user_email'] = $admin_email;
-            $_SESSION['user_role'] = 'admin';
-            $_SESSION['nom_admin'] = 'Abdellah Talemsi';
-            header("Location: admin/dashboardA.php");
-            exit();
+    }elseif($authenticatedUser){
+        
         } elseif ($authenticatedUser['UserRole'] == 'user') {
             header("Location: dashboard.php");
         } elseif ($authenticatedUser['UserRole'] == 'product_owner') {
             header("Location: productowner/dashboardP.php");
         } elseif ($authenticatedUser['UserRole'] == 'scrum_master') {
             header("Location: scrummaster/dashboardS.php");
+        }else {
+            echo "<p class='mt-4 text-sm text-gray-600'>Login failed. Invalid email or password.</p>";
         }
         $_SESSION["user"] = $authenticatedUser;
         $_SESSION["role"] = $authenticatedUser['UserRole'];
         $_SESSION["nom"] = $authenticatedUser['Nom'] . " " . $authenticatedUser['Prenom'];
         exit();
-    } else {
-        echo "<p class='mt-4 text-sm text-gray-600'>Login failed. Invalid email or password.</p>";
-    }
-}
+    } 
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

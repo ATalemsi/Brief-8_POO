@@ -2,20 +2,10 @@
 include '../ScrumMaster.php';
 include '../statistic.php';
 include '../config.php';
-
-
-
 session_start();
 $database = new Database('localhost', 'gestion_dataware', 'root', '');
 $database->connect();
 $pdo = $database->getPDO();
-
-
-if (isset($_GET['action']) && $_GET['action'] === 'logout') {
-  $logout=new ScrumMaster($pdo);
-  $logout->logout();
-}
-
 $role = isset($_SESSION["role"]) ? $_SESSION["role"] : "Unknown Role";
 $name = isset($_SESSION["nom"]) ? $_SESSION["nom"] : "Unknown nom";
 if ($role !== 'scrum_master') {
@@ -38,7 +28,7 @@ $scrumMasterCount = $dashboard->getCountS('users', 'ID_User');
 $projectCount = $dashboard->getCount('projects', 'ProjectID');
 $teamCount = $dashboard->getCount('teams', 'TeamID');
 ?>
-?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

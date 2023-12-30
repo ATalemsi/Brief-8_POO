@@ -50,7 +50,7 @@ $teamCount = $dashboard->getCount('teams', 'TeamID');
           <a href="#" class="flex-shrink-0 w-full group block">
             <div class="flex items-center">
               <div>
-                <img class="inline-block h-9 w-9 rounded-full" src="../img/moi.jpg" alt="profile">
+                <img class="inline-block h-9 w-9 rounded-full" src="../img/moi.png" alt="profile">
               </div>
               <div class="ml-3">
                 <p class="text-sm font-medium text-white">
@@ -102,7 +102,7 @@ $teamCount = $dashboard->getCount('teams', 'TeamID');
           </nav>
         </div>
         <div class=" flex  p-4">
-           <a href="../Login.php" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md" x-state-description="undefined: &quot;bg-gray-900 text-white&quot;, undefined: &quot;text-gray-300 hover:bg-gray-700 hover:text-white&quot;">
+           <a href="?action=logout" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md" x-state-description="undefined: &quot;bg-gray-900 text-white&quot;, undefined: &quot;text-gray-300 hover:bg-gray-700 hover:text-white&quot;">
            <svg class="text-gray-400 group-hover:text-gray-300 mr-3 flex-shrink-0 h-6 w-6" x-state-description="undefined: &quot;text-gray-300&quot;, undefined: &quot;text-gray-400 group-hover:text-gray-300&quot;" x-description="Heroicon name: outline/folder" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17,2H7C5.3,2,4,3.3,4,5v6h8.6l-2.3-2.3c-0.4-0.4-0.4-1,0-1.4c0.4-0.4,1-0.4,1.4,0l4,4c0.4,0.4,0.4,1,0,1.4c0,0,0,0,0,0l-4,4c-0.4,0.4-1,0.4-1.4,0c-0.4-0.4-0.4-1,0-1.4l2.3-2.3H4v6c0,1.7,1.3,3,3,3h10c1.7,0,3-1.3,3-3V5C20,3.3,18.7,2,17,2z"/></svg>
                 Sign out
@@ -116,9 +116,11 @@ $teamCount = $dashboard->getCount('teams', 'TeamID');
         <button id="closeBurgerMenu" class="text-white">&times;</button>
     </div>
     <div class="flex flex-col items-center mt-20">
-        <a href="/admin/dashboardA.php" class="text-white text-xl py-2">Dashboard</a>
-        <a href="/admin/users.php" class="text-white text-xl py-2">Users</a>
-        <a href="/Login.php" class="text-white text-xl py-2">Sign out</a>
+        <a href="dashboardP.php" class="text-white text-xl py-2">Dashboard</a>
+        <a href="project.php" class="text-white text-xl py-2">project</a>
+        <a href="ajouterP.php" class="text-white text-xl py-2">ADD project</a>
+        <a href="AssignerScrum.php" class="text-white text-xl py-2">Assigner Scrum Master</a>
+        <a href="?action=logout" class="text-white text-xl py-2">Sign out</a>
     </div>
 </div>
 

@@ -55,7 +55,7 @@ $teamData = $teamManager->GetTeamScrum();
           <a href="#" class="flex-shrink-0 w-full group block">
             <div class="flex items-center">
               <div>
-                <img class="inline-block h-9 w-9 rounded-full" src="../img/moi.jpg" alt="profile">
+                <img class="inline-block h-9 w-9 rounded-full" src="../img/moi.png" alt="profile">
               </div>
               <div class="ml-3">
                 <p class="text-sm font-medium text-white">

@@ -1,39 +1,29 @@
 <?php
 include('../config.php');
+include '../admin.php';
+include '../statistic.php';
 session_start(); 
 $role=$_SESSION['user_role'];
 $name=$_SESSION['nom_admin'];
+$database = new Database('localhost', 'gestion_dataware', 'root', '');
+$database->connect();
+$pdo = $database->getPDO();
 
 if ($role !== 'admin') {
   // Redirect to an unauthorized access page or show an error message
   header("Location: ../unauthorized.php");
   exit();
 }
-function getCount($pdo, $table, $column)
-{
-    $stmt = $pdo->query("SELECT COUNT($column) AS count FROM $table");
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $result['count'];
+if (isset($_GET['action']) && $_GET['action'] === 'logout') {
+  $logout=new ScrumMaster($pdo);
+  $logout->logout();
 }
-function getCountP($pdo, $table, $column)
-{
-    $stmt = $pdo->query("SELECT COUNT($column) AS count FROM $table where UserRole='product_owner'");
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $result['count'];
-}
-function getCountS($pdo, $table, $column)
-{
-    $stmt = $pdo->query("SELECT COUNT($column) AS count FROM $table where UserRole='scrum_master'");
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $result['count'];
-}
-
-
-$userCount = getCount($pdo, 'users', 'ID_User');
-$productOwnerCount = getCountP($pdo, 'users', 'ID_User');
-$scrumMasterCount = getCountS($pdo, 'users', 'ID_User');
-$projectCount = getCount($pdo, 'projects', 'ProjectID');
-$teamCount = getCount($pdo, 'teams', 'TeamID');
+$dashboard = new Dashboard($pdo);
+$userCount = $dashboard->getCount('users', 'ID_User');
+$productOwnerCount = $dashboard->getCountP('users', 'ID_User');
+$scrumMasterCount = $dashboard->getCountS('users', 'ID_User');
+$projectCount = $dashboard->getCount('projects', 'ProjectID');
+$teamCount = $dashboard->getCount('teams', 'TeamID');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -108,7 +98,7 @@ $teamCount = getCount($pdo, 'teams', 'TeamID');
           </nav>
         </div>
         <div class=" flex  p-4">
-           <a href="../logout.php" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md" x-state-description="undefined: &quot;bg-gray-900 text-white&quot;, undefined: &quot;text-gray-300 hover:bg-gray-700 hover:text-white&quot;">
+           <a href="?action=logout" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-sm font-medium rounded-md" x-state-description="undefined: &quot;bg-gray-900 text-white&quot;, undefined: &quot;text-gray-300 hover:bg-gray-700 hover:text-white&quot;">
            <svg class="text-gray-400 group-hover:text-gray-300 mr-3 flex-shrink-0 h-6 w-6" x-state-description="undefined: &quot;text-gray-300&quot;, undefined: &quot;text-gray-400 group-hover:text-gray-300&quot;" x-description="Heroicon name: outline/folder" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17,2H7C5.3,2,4,3.3,4,5v6h8.6l-2.3-2.3c-0.4-0.4-0.4-1,0-1.4c0.4-0.4,1-0.4,1.4,0l4,4c0.4,0.4,0.4,1,0,1.4c0,0,0,0,0,0l-4,4c-0.4,0.4-1,0.4-1.4,0c-0.4-0.4-0.4-1,0-1.4l2.3-2.3H4v6c0,1.7,1.3,3,3,3h10c1.7,0,3-1.3,3-3V5C20,3.3,18.7,2,17,2z"/></svg>
                 Sign out
@@ -122,9 +112,10 @@ $teamCount = getCount($pdo, 'teams', 'TeamID');
         <button id="closeBurgerMenu" class="text-white">&times;</button>
     </div>
     <div class="flex flex-col items-center mt-20">
-        <a href="/admin/dashboardA.php" class="text-white text-xl py-2">Dashboard</a>
-        <a href="/admin/users.php" class="text-white text-xl py-2">Users</a>
-        <a href="/logout.php" class="text-white text-xl py-2">Sign out</a>
+        <a href="dashboardA.php" class="text-white text-xl py-2">Dashboard</a>
+        <a href="ajouterP.php" class="text-white text-xl py-2">ADD users</a>
+        <a href="users.php" class="text-white text-xl py-2">Users</a>
+        <a href="?action=logout" class="text-white text-xl py-2">Sign out</a>
     </div>
 </div>
 

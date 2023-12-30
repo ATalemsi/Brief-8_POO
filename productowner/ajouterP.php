@@ -45,13 +45,12 @@ $productOwners = new Productowner($pdo);
                 <label for="product-owner" class="block text-gray-600 text-sm font-semibold mb-2">Product Owner</label>
                 <select id="product-owner" name="product-owner" class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:border-blue-500">
                     <?php
-                          $productOwners->GetProduct_project($authenticatedUserID);
-                            echo "<option value=\"{$productOwners[0]['ID_User']}\">{$productOwners[0]['Nom']} {$productOwners[0]['Prenom']}</option>";
+                         $productOwneres= $productOwners->GetProduct_project($authenticatedUserID);
+                            echo "<option value=\"{$productOwneres[0]['ID_User']}\">{$productOwneres[0]['Nom']} {$productOwneres[0]['Prenom']}</option>";
                         
                     ?>
                 </select>
             </div>
-
             <button type="submit" class="w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:border-green-700 focus:ring focus:ring-green-200" name="ajouter-p">
                 Add Project
             </button>
